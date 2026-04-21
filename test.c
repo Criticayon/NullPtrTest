@@ -3,10 +3,7 @@
 #include <stdlib.h>
 
 void vulnerable_sink(char *input) {
-    if (input == NULL) {
-        printf("Error: Input pointer is NULL, safely aborting.\n");
-        return; 
-    }
+    
     size_t len = strlen(input); 
     printf("Processed data length: %zu\n", len);
 }
