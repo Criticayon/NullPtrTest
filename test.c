@@ -2,30 +2,18 @@
 #include <string.h>
 #include <stdlib.h>
 
-// ===================================================
-// 🎯 终点 (Sink)：底层脆弱函数
-// 触发条件：传入的 input 必须为 NULL
-// ===================================================
 void vulnerable_sink(char *input) {
-    if (input == NULL) {
-        printf("Error: Input pointer is NULL, safely aborting.\n");
-        return; 
-    }
+    
     size_t len = strlen(input); 
     printf("Processed data length: %zu\n", len);
 }
+Q
 
-// ===================================================
-// 🌿 分支 A：绝对安全的死胡同 (传入死常量) -> 应该被剪枝
-// ===================================================
-void handle_internal_ping() {
+void A() {
     vulnerable_sink("pong");
 }
 
-// ===================================================
-// 🌿 分支 B：被安全校验拦截的半死路 -> 应该被剪枝
-// ===================================================
-void handle_auth_token(char *token) {
+void B(char *token) {
     if (token == NULL) {
         printf("Security Alert: Token cannot be NULL!\n");
         return; 
@@ -33,10 +21,7 @@ void handle_auth_token(char *token) {
     vulnerable_sink(token);
 }
 
-// ===================================================
-// ☠️ 分支 C：毫无防备的畅通毒脉 (Ultimate Source) -> 应该被选中
-// ===================================================
-void parse_malicious_config(char *config_val) {
+void C(char *config_val) {
     
     vulnerable_sink(config_val);
 }
@@ -56,11 +41,11 @@ int main(int argc, char **argv) {
     char *payload = (argc > 2) ? argv[2] : NULL; 
 
     if (strcmp(route, "ping") == 0) {
-        handle_internal_ping();               
+        A();               
     } else if (strcmp(route, "auth") == 0) {
-        handle_auth_token(payload);           
+        B(payload);           
     } else if (strcmp(route, "config") == 0) {
-        parse_malicious_config(payload);      
+        C(payload);      
     }
     
     return 0;
