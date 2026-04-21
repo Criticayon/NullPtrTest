@@ -9,6 +9,10 @@
 void vulnerable_sink(char *input) {
     // 【漏洞点】：没有任何 if (input != NULL) 的校验，直接扔进 strlen
     // 如果 input 为 NULL，strlen 内部会发生段错误 (Segmentation fault)
+    if (input == NULL) {
+        printf("Error: Input pointer is NULL, safely aborting.\n");
+        return; 
+    }
     size_t len = strlen(input); 
     printf("Processed data length: %zu\n", len);
 }
